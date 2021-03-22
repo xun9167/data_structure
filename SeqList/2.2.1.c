@@ -6,6 +6,8 @@ typedef struct sqlList{
     ElemType data[MaxSize];
     int length;
 }SqlList;
+bool DeleteRep(SqlList *list);//P17D6删除重复元素
+bool Delete_From_s_to_t(SqlList *list,ElemType s,ElemType t);//P17D4D5删除值在s和t之间的元素
 bool DeleteX(SqlList *list,ElemType e);//P17D3删除顺序表中值为x的元素
 bool ReverseList(SqlList *list);//P17D2逆转顺序表
 bool DeleteMin(SqlList *list,ElemType *e);//P17D1删除最小值元素
@@ -19,22 +21,20 @@ int main(){
     int i;
     SqlList list;
     InitList(&list);
-    int loac,num,ret;
+    int loac,num,ret,s,t;
     while(loac!=-1){
         scanf("%d%d",&loac,&num);
         ListInsert(&list,loac,num);
-    
     }
+    printf("输入的顺序表为\n");
     for(i=1;i<=list.length;i++){
-        printf("%d\n",GetElem(&list,i));
+        printf("%d     ",GetElem(&list,i));
     }
-    scanf("%d",&ret);
+    printf("输入s和t的值\n");
+    scanf("%d%d",&s,&t);
+    Delete_From_s_to_t(&list,s,t);
     for(i=1;i<=list.length;i++){
-        printf("%d\n",GetElem(&list,i));
-    }
-    DeleteX(&list,ret);
-    for(i=1;i<=list.length;i++){
-        printf("%d\n",GetElem(&list,i));
+        printf("%d   ",GetElem(&list,i));
     }
     return 0;
 }
@@ -127,4 +127,21 @@ bool DeleteX(SqlList *list,ElemType e){
     }
     list->length=count;
     return true;
+}
+bool Delete_From_s_to_t(SqlList *list,ElemType s,ElemType t){
+    if(s>=t||list->length==0)
+        return false;
+    int count=0;
+    int i;
+    for(i=0;i<list->length;i++){
+        if(list->data[i]<s||list->data[i]>t){
+            list->data[count]=list->data[i];
+            count++;
+        }
+    }
+    list->length=count;
+    return true;
+}
+bool DeleteRep(SqlList *list){
+    
 }
