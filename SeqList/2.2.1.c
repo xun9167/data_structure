@@ -6,6 +6,7 @@ typedef struct sqlList{
     ElemType data[MaxSize];
     int length;
 }SqlList;
+void SearchExchangeInsert(SqlList *list,ElemType e);//P17D9查找值为e的元素，找到与后一个元素对换位置，找不到，加进去
 bool Merge(SqlList lista,SqlList listb,SqlList *list);//P17D7合并两个有序表为一个新的有序表
 bool DeleteRep(SqlList *list);//P17D6删除重复元素
 bool Delete_From_s_to_t(SqlList *list,ElemType s,ElemType t);//P17D4D5删除值在s和t之间的元素
@@ -19,35 +20,25 @@ bool ListDelete(SqlList *list,int i,ElemType *e);
 ElemType GetElem(SqlList *list,int i);
 int LocateElem(SqlList *list,ElemType e);//按值查找元素，并返回元素的下标
 int main(){
-    int i;
-    SqlList list,lista,listb;
-    InitList(&lista);
-    InitList(&listb);
+    int i,m,n;
+    SqlList list;
     InitList(&list);
-    printf("给a赋值\n");
     int loc=0,num;
     while(loc!=-1){
-        scanf("%d %d",&loc,&num);
-        ListInsert(&lista,loc,num);
+        scanf("%d%d",&loc,&num);
+        ListInsert(&list,loc,num);
     }
-    printf("给b赋值\n");
-    loc=0;
-    while(loc!=-1){
-        scanf("%d %d",&loc,&num);
-        ListInsert(&listb,loc,num);
-    }
-    printf("a的值为\n");
-    for(i=1;i<=lista.length;i++){
-        printf("%d  ",GetElem(&lista,i));
-    }
-    printf("\nb的值为\n");
-    for(i=1;i<=listb.length;i++){
-        printf("%d  ",GetElem(&listb,i));
-    }
-    Merge(lista,listb,&list);
-    printf("\nlist的值为\n");
+    printf("顺序表中的值为：%d\n");
     for(i=1;i<=list.length;i++){
-        printf("%d  ",GetElem(&list,i));
+        printf("%d   ",GetElem(&list,i));
+    }
+    int e;
+    printf("输入要查找的值\n");
+    scanf("%d",&e);
+    SearchExchangeInsert(&list,e);
+    printf("交换过之后为\n");
+    for(i=1;i<=list.length;i++){
+        printf("%d   ",GetElem(&list,i));
     }
     return 0;
 }
@@ -189,4 +180,34 @@ bool Merge(SqlList lista,SqlList listb,SqlList *list){//这一题尚未完成
     }
     list->length=k;
     return false;
+}
+void SearchExchangeInsert(SqlList *list,ElemType e){
+    int low,high,mid;
+    int i;
+    low=0;high=list->length-1;
+    while(low<high){
+        mid=(low+high)/2;
+        if(list->data[mid]==e){
+            break;
+            return;
+        }
+        else if(list->data[mid]<e)
+            low=mid+1;
+        else
+            high=mid-1;
+    }
+    if(list->data[mid]=e&&mid!=list->length-1){//互换位置，如果在最后一个位置找到，则无法互换
+        int ret;
+        ret=list->data[mid];
+        list->data[mid]=list->data[mid+1];
+        list->data[mid+1]=ret;
+    }
+    if(low>high){
+        printf("low与high的值为:%d %d\n",low,high);
+        for(i=list->length-1;i>high;i--){
+            list->data[i+1]=list->data[i];
+        }
+        list->data[i+1]=e;
+        list->length++;
+    }
 }
