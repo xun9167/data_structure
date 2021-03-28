@@ -6,6 +6,7 @@ typedef struct LNode{
   ElemType data;
   struct LNode* next;
 }LNode,*LinkList;
+
 bool InitLinkList(LinkList *node);
 bool ListInsert(LinkList *node,int loc,ElemType data);
 int main(){
