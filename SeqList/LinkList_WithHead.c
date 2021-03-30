@@ -6,6 +6,10 @@ typedef struct LNode{
     ElemType data;
     struct LNode *next;
 }LNode,*LinkList;
+int GetLength(LinkList list);//求表长
+LNode *LocateElem(LinkList list,ElemType e);//按照所给元素值，查找对应节点
+LinkList List_TailInsert(LinkList *list);//尾插法建立单链表
+LinkList List_HeadInsert(LinkList *list);//头插法建立链表
 bool InitList(LinkList *list);//初始化链表
 bool ListInsert(LinkList *list,int loc,ElemType e);//插入元素
 void OutPrintf(LinkList list);//遍历输出链表的值
@@ -16,20 +20,11 @@ bool InsertPriorLNode(LNode *p,ElemType e);//指定节点的前插操作，其�
 bool DeleteNode(LNode *p);//指定节点的删除.其中p应为链表中的元素
 int main(){
     LinkList list;
-    InitList(&list);
-    ListInsert(&list,1,1);
-    ListInsert(&list,0,1);
-    ListInsert(&list,10,1);
-    ListInsert(&list,2,5);
-    ListInsert(&list,3,20);
-     ListInsert(&list,4,20);
+    list=List_TailInsert(&list);
     OutPrintf(list);
     int e;
-    LNode *p;
-    scanf("%d",&e);
-    p=GetElem(list,e);
-    DeleteNode(p);
-    OutPrintf(list);
+    e=GetLength(list);
+    printf("链表长度为%d\n",e);
     return 0;
 }
 bool InitList(LinkList *list){
@@ -152,4 +147,55 @@ bool DeleteNode(LNode *p){
     p->next=s->next;       //换元素值实现删除，存在小bug，如果时最后一个会出问题
     free(s);
     return true;
+}
+LinkList List_HeadInsert(LinkList *list){
+    LNode *s;
+    ElemType e;
+    InitList(list);
+    printf("(头插法)输入链表中的值（-1结束）\n");
+    scanf("%d",&e);
+    while(e!=-1){
+        s=(LNode *)malloc(sizeof(LNode));
+        s->data=e;
+        s->next=(*list)->next;
+        (*list)->next=s;
+        scanf("%d",&e);
+    }
+    return *list;
+}
+LinkList List_TailInsert(LinkList *list){
+    LNode *tail,*s;
+    ElemType e;
+    InitList(list);
+    tail=*list;
+    printf("(尾插法)输入链表中的元素（-1结束）\n");
+    scanf("%d",&e);
+    while (e!=-1)
+    {
+        s=(LNode *)malloc(sizeof(LNode));
+        s->data=e;
+        tail->next=s;
+        tail=s;
+        scanf("%d",&e);
+    }
+    tail->next=NULL;
+    return *list;
+}
+LNode *LocateElem(LinkList list,ElemType e){
+    LNode *p;
+    p=(*list).next;
+    while (p!=NULL&&p->data!=e)
+    {
+        p=p->next;
+    }
+    return p;
+}
+int GetLength(LinkList list){
+    LNode *p=list;
+    int j=0;
+    while(p->next!=NULL){
+        j++;
+        p=p->next;
+    }
+    return j;
 }
