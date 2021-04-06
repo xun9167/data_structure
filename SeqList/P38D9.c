@@ -6,7 +6,7 @@ typedef struct LNode{
     ElemType data;
     struct LNode *next;
 }LNode,*LinkList;
-LNode* Search_lst_Common(LinkList lista,LinkList listb);//找到两个链表的公共节点
+void Min_Delete(LinkList *list);//递增输出元素，并删除
 int GetLength(LinkList list);//求表长
 LNode *LocateElem(LinkList list,ElemType e);//按照所给元素值，查找对应节点
 LinkList List_TailInsert(LinkList *list);//尾插法建立单链表
@@ -20,36 +20,10 @@ bool InsertNextNode(LNode *p,ElemType e);//指定节点的后插操作，其中p
 bool InsertPriorLNode(LNode *p,ElemType e);//指定节点的前插操作，其中p应为链表中的元素
 bool DeleteNode(LNode *p);//指定节点的删除.其中p应为链表中的元素
 int main(){
-    LinkList lista;
-    printf("输入链表A：\n");
-    lista=List_TailInsert(&lista);
-    OutPrintf(lista);
-    printf("输入链表B：\n");
-    LinkList listb;
-    listb=List_TailInsert(&listb);
-    OutPrintf(listb);
-    int e;
-    e=GetLength(lista);
-    int i = 0;
-    LNode *p = lista; 
-    for(;i<e/2;i++){
-        p = p->next;
-    }
-    LNode *q = listb;
-    while (q->next!=NULL)
-    {
-        q=q->next;
-    }
-    q->next = p;
-    OutPrintf(listb);
-    LNode *node=Search_lst_Common(lista,listb);
-    printf("共同的元素为:\n");
-    while (node!=NULL)
-    {
-        printf("%d   ",node->data);
-        node=node->next;
-    }
-    
+    LinkList list;
+    list=List_TailInsert(&list);
+    OutPrintf(list);
+    Min_Delete(&list);
     return 0;
 }
 bool InitList(LinkList *list){
@@ -224,36 +198,23 @@ int GetLength(LinkList list){
     }
     return j;
 }
-LNode* Search_lst_Common(LinkList lista,LinkList listb){
-    int lengtha,lengthb;
-    int dist;   //dist为两个链表相差的长度
-    lengtha=GetLength(lista);
-    lengthb=GetLength(listb);
-    LNode *LongLinsk,*ShortLinsk;
-    if(lengtha<lengthb){
-        LongLinsk=listb->next;
-        ShortLinsk=lista->next;
-        dist=lengthb-lengtha;
-    }
-    else{
-        LongLinsk=lista->next;
-        ShortLinsk=listb->next;
-        dist=lengtha-lengthb;
-    }
-    while (dist--)
+void Min_Delete(LinkList *list){
+    while ((*list)->next!=NULL)
     {
-        LongLinsk=LongLinsk->next;
-    }
-    while (LongLinsk!=NULL)
-    {
-        if(LongLinsk==ShortLinsk)
-            return LongLinsk;
-        else{
-            LongLinsk=LongLinsk->next;
-            ShortLinsk=ShortLinsk->next;
+        LNode *min,*p;
+        p=(*list)->next;
+        min=(*list);
+        while(p->next!=NULL){       //此处注意循环条件
+            if(min->next->data>p->next->data)
+                min=p;
+            p=p->next;
         }
+        printf("删除的值为：");
+        printf("%d\n",min->next->data);
+        LNode *ret;
+        ret=min->next;
+        min->next=min->next->next;
+        free(ret);
     }
-    return NULL;
-    
-
+    free((*list));
 }
