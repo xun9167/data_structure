@@ -211,15 +211,16 @@ LinkList fenjie_2(LinkList *lista){   //此题未完成
         s=p;
         if(count%2==0){
             printf("if  %d",s->data);
+            p=p->next;
             s->next=head->next;
             head->next=s;
         }
         else{
             la->next=s;
             la=s;
+            p=p->next;
         }
         count++;
-        p=p->next;
     }
     la->next=NULL;
     return head;
