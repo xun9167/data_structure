@@ -6,7 +6,7 @@ typedef struct LNode{
     ElemType data;
     struct LNode *next;
 }LNode,*LinkList;
-LinkList FengJie(LinkList *lista);//将链表A分解为两个两个链表A，B（按基偶顺序）；
+void Delete_Chongfu(LinkList *list);//去掉递增链表中的重复元素
 int GetLength(LinkList list);//求表长
 LNode *LocateElem(LinkList list,ElemType e);//按照所给元素值，查找对应节点
 LinkList List_TailInsert(LinkList *list);//尾插法建立单链表
@@ -20,12 +20,11 @@ bool InsertNextNode(LNode *p,ElemType e);//指定节点的后插操作，其中p
 bool InsertPriorLNode(LNode *p,ElemType e);//指定节点的前插操作，其中p应为链表中的元素
 bool DeleteNode(LNode *p);//指定节点的删除.其中p应为链表中的元素
 int main(){
-    LinkList lista,listb;
-    lista=List_TailInsert(&lista);
-    OutPrintf(lista);
-    listb=FengJie(&lista);
-    OutPrintf(lista);
-    OutPrintf(listb);
+    LinkList list;
+    list=List_TailInsert(&list);
+    OutPrintf(list);
+    Delete_Chongfu(&list);
+    OutPrintf(list);
     return 0;
 }
 bool InitList(LinkList *list){
@@ -200,29 +199,23 @@ int GetLength(LinkList list){
     }
     return j;
 }
-LinkList FengJie(LinkList *lista){
-    LNode *head=(LNode *)malloc(sizeof(LNode));
-    LNode *p,*la,*lb;
-    lb=head;
-    la=(*lista);
-    p=(*lista)->next;
-    (*lista)->next=NULL;
-    int count=1;
+void Delete_Chongfu(LinkList *list){
+    LNode *pre,*p,*s;
+    pre=(*list)->next;
+    p=pre->next;
     while (p!=NULL)
     { 
-        if(count%2==0){
-            printf("%d  ",lb->data);
-            lb->next=p;
-            lb=p;
+        if(pre->data==p->data){
+            s=p;
+            pre->next=p->next;
+            p=p->next;
+            free(s);
         }
         else{
-            la->next=p;
-            la=p;
+            pre=p;
+            p=p->next;
+            
         }
-        count++;
-        p=p->next;
     }
-    la->next=NULL;
-    lb->next=NULL;
-    return head;
+    
 }

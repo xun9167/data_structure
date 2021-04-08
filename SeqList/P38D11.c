@@ -6,7 +6,7 @@ typedef struct LNode{
     ElemType data;
     struct LNode *next;
 }LNode,*LinkList;
-LinkList FengJie(LinkList *lista);//将链表A分解为两个两个链表A，B（按基偶顺序）；
+LinkList fenjie_2(LinkList *lista);//分解链表
 int GetLength(LinkList list);//求表长
 LNode *LocateElem(LinkList list,ElemType e);//按照所给元素值，查找对应节点
 LinkList List_TailInsert(LinkList *list);//尾插法建立单链表
@@ -23,7 +23,7 @@ int main(){
     LinkList lista,listb;
     lista=List_TailInsert(&lista);
     OutPrintf(lista);
-    listb=FengJie(&lista);
+    listb=fenjie_2(&lista);
     OutPrintf(lista);
     OutPrintf(listb);
     return 0;
@@ -200,29 +200,27 @@ int GetLength(LinkList list){
     }
     return j;
 }
-LinkList FengJie(LinkList *lista){
-    LNode *head=(LNode *)malloc(sizeof(LNode));
-    LNode *p,*la,*lb;
-    lb=head;
-    la=(*lista);
-    p=(*lista)->next;
-    (*lista)->next=NULL;
+LinkList fenjie_2(LinkList *lista){   //此题未完成
     int count=1;
-    while (p!=NULL)
-    { 
+    LNode *p,*la,*s;
+    LNode *head=(LNode *)malloc(sizeof(LNode));
+    head->next=NULL;
+    p=(*lista)->next;
+    la=(*lista);
+    while(p!=NULL){
+        s=p;
         if(count%2==0){
-            printf("%d  ",lb->data);
-            lb->next=p;
-            lb=p;
+            printf("if  %d",s->data);
+            s->next=head->next;
+            head->next=s;
         }
         else{
-            la->next=p;
-            la=p;
+            la->next=s;
+            la=s;
         }
         count++;
         p=p->next;
     }
     la->next=NULL;
-    lb->next=NULL;
     return head;
 }
