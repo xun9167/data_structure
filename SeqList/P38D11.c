@@ -210,7 +210,6 @@ LinkList fenjie_2(LinkList *lista){   //此题未完成
     while(p!=NULL){
         s=p;
         if(count%2==0){
-            printf("if  %d",s->data);
             p=p->next;
             s->next=head->next;
             head->next=s;
