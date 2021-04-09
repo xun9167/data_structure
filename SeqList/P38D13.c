@@ -6,6 +6,7 @@ typedef struct LNode{
     ElemType data;
     struct LNode *next;
 }LNode,*LinkList;
+void MergeLinklist(LinkList *la,LinkList *lb);//按照元素递解的顺序，合并两个递增的点链表
 int GetLength(LinkList list);//求表长
 LNode *LocateElem(LinkList list,ElemType e);//按照所给元素值，查找对应节点
 LinkList List_TailInsert(LinkList *list);//尾插法建立单链表
@@ -19,12 +20,13 @@ bool InsertNextNode(LNode *p,ElemType e);//指定节点的后插操作，其中p
 bool InsertPriorLNode(LNode *p,ElemType e);//指定节点的前插操作，其中p应为链表中的元素
 bool DeleteNode(LNode *p);//指定节点的删除.其中p应为链表中的元素
 int main(){
-    LinkList list;
-    list=List_TailInsert(&list);
-    OutPrintf(list);
-    int e;
-    e=GetLength(list);
-    printf("链表长度为%d\n",e);
+    LinkList lista,listb;
+    lista=List_TailInsert(&lista);
+    OutPrintf(lista);
+    listb=List_TailInsert(&listb);
+    OutPrintf(listb);
+    MergeLinklist(&lista,&listb);
+    OutPrintf(lista);
     return 0;
 }
 bool InitList(LinkList *list){
@@ -198,4 +200,37 @@ int GetLength(LinkList list){
         p=p->next;
     }
     return j;
+}
+void MergeLinklist(LinkList *la,LinkList *lb){
+    LNode *pa,*pb,*ret;
+    pa=(*la)->next;
+    pb=(*lb)->next;
+    (*la)->next=NULL;
+    free(*lb);
+    while(pa!=NULL&&pb!=NULL){
+        if(pa->data<pb->data){
+            ret=pa;
+            pa=pa->next;
+            ret->next=(*la)->next;
+            (*la)->next=ret;
+        }
+        else{
+            ret=pb;
+            pb=pb->next;
+            ret->next=(*la)->next;
+            (*la)->next=ret;
+        }
+    }
+    if(pa!=NULL){
+            ret=pa;
+            pa=pa->next;
+            ret->next=(*la)->next;
+            (*la)->next=ret;
+        }
+        if(pb!=NULL){
+            ret=pb;
+            pb=pb->next;
+            ret->next=(*la)->next;
+            (*la)->next=ret;
+        }
 }
