@@ -207,6 +207,7 @@ void MergeLinklist(LinkList *la,LinkList *lb){
     pb=(*lb)->next;
     (*la)->next=NULL;
     free(*lb);
+    
     while(pa!=NULL&&pb!=NULL){
         if(pa->data<pb->data){
             ret=pa;
