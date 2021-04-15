@@ -6,7 +6,7 @@ typedef struct LNode{
     ElemType data;
     struct LNode *next;
 }LNode,*LinkList;
-int Pattern(LinkList la,LinkList lb);//比较是否为子字符串
+LinkList Link(LinkList *la,LinkList *lb);//链接两个单链表
 int GetLength(LinkList list);//求表长
 LNode *LocateElem(LinkList list,ElemType e);//按照所给元素值，查找对应节点
 LinkList List_TailInsert(LinkList *list);//尾插法建立单链表
@@ -20,12 +20,12 @@ bool InsertNextNode(LNode *p,ElemType e);//指定节点的后插操作，其中p
 bool InsertPriorLNode(LNode *p,ElemType e);//指定节点的前插操作，其中p应为链表中的元素
 bool DeleteNode(LNode *p);//指定节点的删除.其中p应为链表中的元素
 int main(){
-    LinkList list;
-    list=List_TailInsert(&list);
-    OutPrintf(list);
-    int e;
-    e=GetLength(list);
-    printf("链表长度为%d\n",e);
+    LinkList lista,listb;
+    lista=List_TailInsert(&lista);
+    listb=List_TailInsert(&listb);
+    OutPrintf(lista);
+    OutPrintf(listb);
+    OutPrintf(Link(&lista,&listb));
     return 0;
 }
 bool InitList(LinkList *list){
@@ -62,7 +62,7 @@ bool ListInsert(LinkList *list,int loc,ElemType e){
 void OutPrintf(LinkList list){
     LNode *node=list->next;   //链表带有头节点，跳过第一个节点
     printf("链表的值为\n");
-    while (node!=NULL)
+    while (node!=NULL&&node!=list)
     {
         printf("%d    ",node->data);
         node=node->next;
@@ -179,7 +179,7 @@ LinkList List_TailInsert(LinkList *list){
         tail=s;
         scanf("%d",&e);
     }
-    tail->next=NULL;
+    tail->next=(*list);
     return *list;
 }
 LNode *LocateElem(LinkList list,ElemType e){
@@ -200,6 +200,19 @@ int GetLength(LinkList list){
     }
     return j;
 }
-int Pattern(LinkList la,LinkList lb){
-     
+LinkList Link(LinkList *la,LinkList *lb){
+    LNode *p;
+    p=(*la);
+    while (p->next!=(*la))
+    {
+        p=p->next;
+    }
+    p->next=(*lb);
+    p=(*lb);
+    while (p->next!=(*lb))
+    {
+        p=p->next;
+    }
+    p->next=(*la);
+    return (*la);
 }
