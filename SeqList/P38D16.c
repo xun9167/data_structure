@@ -20,12 +20,12 @@ bool InsertNextNode(LNode *p,ElemType e);//指定节点的后插操作，其中p
 bool InsertPriorLNode(LNode *p,ElemType e);//指定节点的前插操作，其中p应为链表中的元素
 bool DeleteNode(LNode *p);//指定节点的删除.其中p应为链表中的元素
 int main(){
-    LinkList list;
-    list=List_TailInsert(&list);
-    OutPrintf(list);
-    int e;
-    e=GetLength(list);
-    printf("链表长度为%d\n",e);
+    LinkList lista,listb;
+    lista=List_TailInsert(&lista);
+    OutPrintf(lista);
+    listb=List_TailInsert(&listb);
+    OutPrintf(listb);
+    printf("int=%d",Pattern(lista,listb));
     return 0;
 }
 bool InitList(LinkList *list){
@@ -201,5 +201,25 @@ int GetLength(LinkList list){
     return j;
 }
 int Pattern(LinkList la,LinkList lb){
-     
+     LNode *pre,*pa,*pb;
+     pa=la->next;
+     pb=lb->next;
+     pre=pa;                                     //注意不起眼的小问题
+     while(pa!=NULL&&pb!=NULL){
+         
+         if(pa->data==pb->data){
+             pa=pa->next;
+             pb=pb->next;
+         }
+         else{
+             pre=pre->next;
+             pa=pre;
+             pb=lb->next;
+         }
+     }
+      if(pb==NULL)
+            return 1;
+        else
+            return -1;
+
 }
