@@ -6,8 +6,9 @@ typedef struct DNode
 {
     ElemType data;
     struct DNode *prior,*next;
+    int freq;
 }DNode,*DNodeList;
-
+DNodeList Locate(DNodeList *list,ElemType x);//第二十题，题看不太明白，有点懵
 bool InitDLnikList(DNodeList *list);//初始化双链表
 bool Empty(DNodeList list);//判断带头节点的双链表是否为空
 void CreateDList(DNodeList *list);//尾插法建立带头节点的单链表
@@ -19,12 +20,13 @@ int main(){
     DNodeList list;
     CreateDList(&list);
     OutPrint(list);
-    int loc;
-    printf("输入值(位置)\n");
-    scanf("%d",&loc);
-    DNode *dnode=GetElem(list,loc);
-    DeleteNextDNode(dnode);
-    OutPrint(list);
+    int x;
+    while (x!=-1)
+    {
+        scanf("%d",&x);
+        list=Locate(&list,x);
+        OutPrint(list);
+    }
     return 0;
 }
 bool InitDLnikList(DNodeList *list){
@@ -53,6 +55,7 @@ void CreateDList(DNodeList *list){
     while (e!=-1)
     {
         dnode=(DNode *)malloc(sizeof(DNode));
+        dnode->freq=0;
         dnode->next=NULL;
         dnode->data=e;
         dnode->prior=tail;
@@ -118,4 +121,27 @@ bool DeleteNextDNode(DNode *dnode){
     dnode->prior->next=p;
     free(dnode);
     return true;
+}
+DNodeList Locate(DNodeList *list,ElemType x){
+    DNode *p,*q;
+    p=(*list)->next;
+    while (p!=NULL&&p->data!=x)
+        p=p->next;
+    if(p==NULL){
+         printf("没有值为x的元素\n");
+         return (*list);
+    }
+    else{
+        p->freq++;
+        if(p->next!=NULL) p->next->prior=p->prior;
+        p->prior->next=p->next;
+        q=p->prior;
+        while (q!=(*list)&&q->freq<=p->freq)
+            q=q->prior;
+        p->next=q->next;
+        q->next->prior=p;
+        p->prior=q;
+        q->next=p;
+    }   
+    return p;
 }
