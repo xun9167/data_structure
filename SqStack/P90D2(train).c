@@ -83,7 +83,7 @@ void Train_Arrange(int train[],int n){
         if(train[i]==0){
             printf("%d",train[i]);
             push(&s,train[i]);
-            printf("第%d号车厢进入调度",i);
+            printf("第%d号车厢进入调度\n",i);
         }
         else{
             train[k]=1;
